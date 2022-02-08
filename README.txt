@@ -1,0 +1,1 @@
+This is a script, that scrape the current coronvirus information from the official bulgarian coronavirus site and sends it as an email.
