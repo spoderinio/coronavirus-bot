@@ -105,23 +105,6 @@ newly_hospitalized_sublable = newly_hospitalized.find(
 new_cases_persentage = round((int(tests_value.replace(" ", "")) - (int(tests_value.replace(
     " ", "")) - int(new_cases.replace(" ", "")))) / int(tests_value.replace(" ", "")) * 100, 2)
 
-message = (
-    f"Subject: Ковид дневна статистика\n\n{stats_text}\n{new_cases} Нови случаи. Които се равняват на {new_cases_persentage}% от направените за деня тестове.\n{tests_overall} {tests_lable} {tests_value} {tests_sublable}.\n"
-    f"{covid_overall_confirmed_value} {covid_overall_lable}, {covid_overall_value} {covid_overall_sublable}.\n"
-    f"{healded_value_overall} {healded_lable}, {healded_value} {healded_sublable}.\n"
-    f"{hospitalized_value_overall} {hospitalized_lable}, {hospitalized_value} {hospitalized_sublable}.\n"
-    f"{deaths_value_overall} {deaths_lable}, {deaths_value} {deaths_sublable}.\n"
-    f"{vaccine_value_overall} {vaccine_lable}, {vaccine_value} {vaccine_sublable}.\n"
-    f"{vaccinated_value_overall} {vaccinated_lable}, {vaccinated_value} {vaccinated_sublable}.\n"
-    f"{newly_hospitalized_day_value} {newly_hospitalized_lable} {newly_hospitalized_subvalue} {newly_hospitalized_sublable}.\n"
-    "*Ваксинирани са всички лица със завършен ваксинационен курс.").encode("utf-8")
-
-# with smtplib.SMTP("smtp.gmail.com") as connection:
-#     connection.starttls()
-#     connection.login(user=MY_EMAIL, password=MY_PASSWORD)
-#     connection.sendmail(from_addr=MY_EMAIL,
-#                         to_addrs=RECIPIENT,
-#                         msg=message)
 
 msg = MIMEMultipart()
 html = '''\
