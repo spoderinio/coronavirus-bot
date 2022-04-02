@@ -2,11 +2,18 @@ import requests
 from bs4 import BeautifulSoup
 import smtplib
 import os
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 
 URL = "https://coronavirus.bg/"
-MY_EMAIL = os.environ["SENDER"]
-MY_PASSWORD = os.environ["PASSWORD"]
-RECIPIENT = os.environ["RECIPIENT"]
+# MY_EMAIL = os.environ["SENDER"]
+# MY_PASSWORD = os.environ["PASSWORD"]
+# RECIPIENT = os.environ["RECIPIENT"]
+
+MY_EMAIL = "spoderinio@gmail.com"
+MY_PASSWORD = "sam0zapersonal!"
+RECIPIENT = "spoder@gmail.com"
 
 resnponse = requests.get(URL)
 
@@ -109,9 +116,44 @@ message = (
     f"{newly_hospitalized_day_value} {newly_hospitalized_lable} {newly_hospitalized_subvalue} {newly_hospitalized_sublable}.\n"
     "*Ваксинирани са всички лица със завършен ваксинационен курс.").encode("utf-8")
 
+# with smtplib.SMTP("smtp.gmail.com") as connection:
+#     connection.starttls()
+#     connection.login(user=MY_EMAIL, password=MY_PASSWORD)
+#     connection.sendmail(from_addr=MY_EMAIL,
+#                         to_addrs=RECIPIENT,
+#                         msg=message)
+
+msg = MIMEMultipart()
+html = '''\
+<!DOCTYPE html>
+<html>
+
+<body>
+    <h2>''' + str(stats_text) + '''</h2>
+    <ul>
+        <li><em>''' + str(new_cases) + '''</em> Нови случаи. Които се равняват на <b><em>''' + str(new_cases_persentage) + '''%</em></b> от направените за деня тестове.</li>
+        <li><em>''' + str(tests_overall) + '''</em> ''' + str(tests_lable) + ''' <b><em></em>''' + str(tests_value) + '''</b> ''' + str(tests_sublable) + '''.
+        </li>
+        <li><em>''' + str(covid_overall_confirmed_value) + '''</em> ''' + str(covid_overall_lable) + ''', <b><em>''' + str(covid_overall_value) + '''</em></b> ''' + str(covid_overall_sublable) + '''.</li>
+        <li><em>''' + str(healded_value_overall) + '''</em> ''' + str(healded_lable) + ''', <b><em>''' + str(healded_value) + '''</em></b> ''' + str(healded_sublable) + '''.</li>
+        <li><em>''' + str(hospitalized_value_overall) + '''</em> ''' + str(hospitalized_lable) + ''', <b><em>''' + str(hospitalized_value) + '''</em></b> ''' + str(hospitalized_sublable) + '''.</li>
+        <li><em>''' + str(deaths_value_overall) + '''</em> ''' + str(deaths_lable) + ''', <b><em>''' + str(deaths_value) + '''</em></b> ''' + str(deaths_sublable) + '''.</li>
+        <li><em>''' + str(vaccine_value_overall) + '''</em>''' + str(vaccine_lable) + ''', <b><em>''' + str(vaccine_value) + '''</em></b> ''' + str(vaccine_sublable) + '''.</li>
+        <li><em>''' + str(vaccinated_value_overall) + '''%</em> ''' + str(vaccinated_lable) + ''', <b>''' + str(vaccinated_value) + '''%</b> ''' + str(vaccinated_sublable) + '''.</li>
+        <li><em>''' + str(newly_hospitalized_day_value) + '''</em> ''' + str(newly_hospitalized_lable) + ''' <b>''' + str(newly_hospitalized_subvalue) + '''%</b> ''' + str(newly_hospitalized_sublable) + '''.</li>
+        <h3>*Ваксинирани са всички лица със <b><em>завършен</em></b> ваксинационен курс.</h3>
+    </ul>
+
+</body>
+
+</html>'''
+
+msg.attach(MIMEText(html, 'html'))
+text = msg.as_string()
+
 with smtplib.SMTP("smtp.gmail.com") as connection:
     connection.starttls()
     connection.login(user=MY_EMAIL, password=MY_PASSWORD)
     connection.sendmail(from_addr=MY_EMAIL,
                         to_addrs=RECIPIENT,
-                        msg=message)
+                        msg=text)
